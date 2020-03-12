@@ -1,11 +1,12 @@
-import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 
+const GET = "cats/GET"
 const GET_CURRENT = "cats/GET_CURRENT"
 
 const initialState = {
-  current: ""
+  current: "",
+  cats: []
 }
 
 export default (state = initialState, action) => {
@@ -23,21 +24,21 @@ export default (state = initialState, action) => {
   }
 }
 
-function getCurrent(slug) {
+function getCategories() {
   return dispatch => {
-    axios.get("/api/category/" + slug).then(resp => {
+    axios.get("/api/categories").then(resp => {
       dispatch({
-        type: GET_CURRENT,
+        type: GET,
         payload: resp.data
       })
     })
   }
 }
 
-export function useExample() {
+export function useCats() {
   const dispatch = useDispatch()
-  const foo = useSelector(appState => appState.exampleState.foo)
-  const get = () => dispatch(getExample())
+  const cats = useSelector(appState => appState.catState.cats)
+  const get = () => dispatch(getCategories())
 
-  return { getCurrent }
+  return { cats, get }
 }

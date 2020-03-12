@@ -4,8 +4,16 @@ const conn = require("../db")
 
 router.get("/categories", (req, res, next) => {
   const sql = `SELECT * FROM categories`
+
   conn.query(sql, (err, results, fields) => {
-    const cats = results.filter(c => c.parent_id == null).map[p => ({})]
+    const cats = results
+      .filter(c => c.parent_id == null)
+      .map(p => ({
+        ...p,
+        sub: results.filter(c => c.parent_id == p.id)
+      }))
+
+    res.json(cats)
   })
 })
 
